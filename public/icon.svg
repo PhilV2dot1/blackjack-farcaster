@@ -1,38 +1,23 @@
 <svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- Background -->
-  <rect width="512" height="512" rx="80" fill="#1A1A1A"/>
+  <!-- Solid green background (casino theme) -->
+  <rect width="512" height="512" fill="#0D7C4D"/>
 
-  <!-- Glow effect -->
-  <circle cx="256" cy="256" r="180" fill="url(#glow)" opacity="0.3"/>
+  <!-- White circle border -->
+  <circle cx="256" cy="256" r="180" stroke="white" stroke-width="20" fill="none"/>
 
-  <!-- Card background left -->
-  <rect x="120" y="140" width="140" height="200" rx="12" fill="white" transform="rotate(-15 190 240)"/>
+  <!-- Simple card icons in white -->
+  <!-- Left card -->
+  <rect x="140" y="180" width="80" height="110" rx="8" stroke="white" stroke-width="10" fill="none"/>
+  <text x="180" y="245" font-family="Arial, sans-serif" font-size="48" font-weight="bold" fill="white" text-anchor="middle">A</text>
 
-  <!-- Card background right -->
-  <rect x="252" y="140" width="140" height="200" rx="12" fill="white" transform="rotate(15 322 240)"/>
+  <!-- Right card -->
+  <rect x="290" y="180" width="80" height="110" rx="8" stroke="white" stroke-width="10" fill="none"/>
+  <text x="330" y="245" font-family="Arial, sans-serif" font-size="48" font-weight="bold" fill="white" text-anchor="middle">K</text>
 
-  <!-- Spade symbol on left card -->
-  <path d="M190 220 C190 220, 175 200, 175 185 C175 170, 185 160, 190 160 C195 160, 205 170, 205 185 C205 200, 190 220, 190 220 Z M190 220 L190 235 M180 230 L200 230"
-        stroke="#1A1A1A" stroke-width="3" fill="#1A1A1A" transform="rotate(-15 190 240)"/>
+  <!-- "21" below cards -->
+  <text x="256" y="330" font-family="Arial, sans-serif" font-size="60" font-weight="bold" fill="white" text-anchor="middle">21</text>
 
-  <!-- Heart symbol on right card -->
-  <path d="M322 180 C322 180, 310 165, 298 165 C290 165, 285 170, 285 178 C285 170, 280 165, 272 165 C260 165, 248 180, 248 180 C248 180, 260 205, 285 220 C310 205, 322 180, 322 180 Z"
-        fill="#FF0000" transform="rotate(15 322 240)"/>
-
-  <!-- "21" in center -->
-  <text x="256" y="320" font-family="Arial, sans-serif" font-size="120" font-weight="bold" fill="#FCFF52" text-anchor="middle" stroke="#1A1A1A" stroke-width="4">21</text>
-
-  <!-- "BLACKJACK" text -->
-  <text x="256" y="420" font-family="Arial, sans-serif" font-size="32" font-weight="bold" fill="#FCFF52" text-anchor="middle">BLACKJACK</text>
-
-  <!-- Celo accent -->
-  <circle cx="256" cy="450" r="8" fill="#FCFF52"/>
-
-  <!-- Gradient definitions -->
-  <defs>
-    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" style="stop-color:#FCFF52;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#FCFF52;stop-opacity:0" />
-    </radialGradient>
-  </defs>
+  <!-- Game name -->
+  <text x="256" y="440" font-family="Arial, sans-serif" font-size="48" font-weight="bold" fill="white" text-anchor="middle">Blackjack</text>
+  <text x="256" y="480" font-family="Arial, sans-serif" font-size="36" font-weight="normal" fill="white" text-anchor="middle">Celo</text>
 </svg>
