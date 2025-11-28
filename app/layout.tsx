@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     description: "Play Blackjack on-chain with Farcaster!",
     images: [
       {
-        url: `${baseUrl}/og-image.png`,
+        url: `${baseUrl}/og-image.svg`,
         width: 1200,
         height: 630,
       },
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   other: {
     "fc:miniapp": JSON.stringify({
       version: "1",
-      imageUrl: `${baseUrl}/og-image.png`,
+      imageUrl: `${baseUrl}/og-image.svg`,
       button: {
         title: "Play Blackjack",
         action: {

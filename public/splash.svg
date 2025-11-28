@@ -1,0 +1,71 @@
+<svg width="1080" height="1920" viewBox="0 0 1080 1920" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="1080" height="1920" fill="url(#splashBg)"/>
+
+  <!-- Top glow -->
+  <circle cx="540" cy="400" r="300" fill="url(#topGlow)" opacity="0.3"/>
+
+  <!-- Bottom glow -->
+  <circle cx="540" cy="1520" r="300" fill="url(#bottomGlow)" opacity="0.3"/>
+
+  <!-- Large playing cards -->
+  <!-- Left card - rotated -->
+  <g transform="translate(200, 600) rotate(-15)">
+    <rect width="280" height="400" rx="20" fill="white" stroke="#FCFF52" stroke-width="6"/>
+    <text x="40" y="80" font-family="Arial, sans-serif" font-size="64" font-weight="bold" fill="#1A1A1A">A</text>
+    <!-- Spade -->
+    <path d="M140 200 C140 200, 120 170, 120 145 C120 120, 133 105, 140 105 C147 105, 160 120, 160 145 C160 170, 140 200, 140 200 Z M140 200 L140 225 M120 215 L160 215"
+          fill="#1A1A1A" stroke="#1A1A1A" stroke-width="3"/>
+    <text x="240" y="390" font-family="Arial, sans-serif" font-size="64" font-weight="bold" fill="#1A1A1A" transform="rotate(180 140 200)">A</text>
+  </g>
+
+  <!-- Right card - rotated other way -->
+  <g transform="translate(600, 650) rotate(15)">
+    <rect width="280" height="400" rx="20" fill="white" stroke="#FCFF52" stroke-width="6"/>
+    <text x="40" y="80" font-family="Arial, sans-serif" font-size="64" font-weight="bold" fill="#1A1A1A">K</text>
+    <!-- Heart -->
+    <path d="M140 160 C140 160, 125 140, 110 140 C100 140, 93 147, 93 157 C93 147, 86 140, 76 140 C61 140, 46 160, 46 160 C46 160, 61 200, 93 225 C125 200, 140 160, 140 160 Z"
+          fill="#FF0000"/>
+    <text x="240" y="390" font-family="Arial, sans-serif" font-size="64" font-weight="bold" fill="#1A1A1A" transform="rotate(180 140 200)">K</text>
+  </g>
+
+  <!-- Giant "21" -->
+  <text x="540" y="1150" font-family="Arial, sans-serif" font-size="240" font-weight="bold" fill="#FCFF52" text-anchor="middle" stroke="#1A1A1A" stroke-width="8">21</text>
+
+  <!-- Title -->
+  <text x="540" y="1350" font-family="Arial, sans-serif" font-size="72" font-weight="bold" fill="#FCFF52" text-anchor="middle">BLACKJACK</text>
+
+  <!-- Subtitle -->
+  <text x="540" y="1430" font-family="Arial, sans-serif" font-size="48" fill="white" text-anchor="middle">on Celo</text>
+
+  <!-- Loading indicator -->
+  <circle cx="540" cy="1600" r="12" fill="#FCFF52">
+    <animate attributeName="opacity" values="0.3;1;0.3" dur="1.5s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="500" cy="1600" r="12" fill="#FCFF52">
+    <animate attributeName="opacity" values="0.3;1;0.3" dur="1.5s" begin="0.2s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="580" cy="1600" r="12" fill="#FCFF52">
+    <animate attributeName="opacity" values="0.3;1;0.3" dur="1.5s" begin="0.4s" repeatCount="indefinite"/>
+  </circle>
+
+  <!-- Footer text -->
+  <text x="540" y="1750" font-family="Arial, sans-serif" font-size="32" fill="#999" text-anchor="middle">Powered by Celo</text>
+
+  <!-- Gradients -->
+  <defs>
+    <linearGradient id="splashBg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#0D4D2C;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#1A1A1A;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0A3820;stop-opacity:1" />
+    </linearGradient>
+    <radialGradient id="topGlow">
+      <stop offset="0%" style="stop-color:#FCFF52;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FCFF52;stop-opacity:0" />
+    </radialGradient>
+    <radialGradient id="bottomGlow">
+      <stop offset="0%" style="stop-color:#FCFF52;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FCFF52;stop-opacity:0" />
+    </radialGradient>
+  </defs>
+</svg>
