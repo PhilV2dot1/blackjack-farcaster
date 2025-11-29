@@ -25,7 +25,7 @@ export const config = createConfig({
         name: "Blackjack on Celo",
         description: "Play Blackjack on-chain! Free mode or compete on Celo blockchain.",
         url: getAppUrl(),
-        icons: [`${getAppUrl()}/icon.svg`],
+        icons: [`${getAppUrl()}/icon.png`],
       },
       showQrModal: true,
     }),
