@@ -33,14 +33,14 @@ export default function Home() {
   } = useBlackjack();
 
   return (
-    <div className="min-h-screen p-4 sm:p-8">
+    <div className="min-h-screen p-4 sm:p-8 bg-gradient-to-br from-gray-100 via-gray-50 to-yellow-50/20">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <header className="text-center mb-8">
-          <h1 className="text-4xl sm:text-5xl font-bold text-celo-yellow mb-2 drop-shadow-lg">
+          <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-2 drop-shadow-sm">
             🃏 Blackjack on Celo
           </h1>
-          <p className="text-gray-300 text-sm sm:text-base">
+          <p className="text-gray-600 text-sm sm:text-base font-medium">
             Play free or on-chain with Celo blockchain
           </p>
         </header>
@@ -107,19 +107,19 @@ export default function Home() {
         )}
 
         {/* Footer */}
-        <footer className="text-center text-gray-400 text-sm mt-12 pb-4">
+        <footer className="text-center text-gray-600 text-sm mt-12 pb-4">
           <p>
             Built with ❤️ on{" "}
             <a
               href="https://celo.org"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-celo-yellow hover:underline"
+              className="text-gray-900 font-semibold hover:text-celo-yellow transition-colors"
             >
               Celo
             </a>
           </p>
-          <p className="mt-1 text-xs">
+          <p className="mt-1 text-xs text-gray-500">
             Free Play: Virtual credits | On-Chain: Provably fair on Celo blockchain
           </p>
         </footer>

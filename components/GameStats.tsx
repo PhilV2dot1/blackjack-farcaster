@@ -12,18 +12,28 @@ export function GameStats({ stats, mode, credits, onResetCredits }: GameStatsPro
   const winRate = totalGames > 0 ? ((stats.wins / totalGames) * 100).toFixed(1) : '0.0';
 
   return (
-    <div className="bg-white/95 backdrop-blur-lg rounded-2xl p-6 shadow-xl border-2 border-gray-700">
+    <div
+      className="bg-white/95 backdrop-blur-lg rounded-2xl p-6 shadow-xl border-2 border-gray-300"
+      style={{
+        boxShadow: "0 0 0 1px rgba(252, 255, 82, 0.3), 0 10px 15px -3px rgba(0, 0, 0, 0.1)"
+      }}
+    >
       <h3 className="text-xl font-bold text-center mb-4 text-gray-900">Statistics</h3>
 
       {/* Free mode credits */}
       {mode === 'free' && credits !== undefined && (
-        <div className="mb-4 p-3 bg-gradient-to-r from-celo-yellow/20 to-yellow-100 rounded-lg border border-celo-yellow/50">
+        <div
+          className="mb-4 p-3 bg-gradient-to-r from-yellow-100 to-yellow-50 rounded-lg border-2 border-celo-yellow/50"
+          style={{
+            boxShadow: "0 0 0 1px rgba(252, 255, 82, 0.2)"
+          }}
+        >
           <div className="text-sm text-gray-700 font-medium text-center">Credits</div>
           <div className="text-3xl font-bold text-center text-gray-900">{credits}</div>
           {credits < 100 && (
             <button
               onClick={onResetCredits}
-              className="mt-2 w-full px-3 py-1 text-xs bg-celo-yellow hover:bg-yellow-400 text-gray-900 rounded-lg font-semibold transition-all"
+              className="mt-2 w-full px-3 py-1 text-xs bg-celo-yellow hover:bg-yellow-400 text-gray-900 rounded-lg font-semibold transition-all shadow-sm"
             >
               Reset to 1000
             </button>
@@ -50,7 +60,7 @@ export function GameStats({ stats, mode, credits, onResetCredits }: GameStatsPro
       <div className="pt-4 border-t border-gray-300">
         <div className="text-center">
           <div className="text-sm text-gray-600 mb-1">Win Rate</div>
-          <div className="text-3xl font-bold text-celo-dark">{winRate}%</div>
+          <div className="text-3xl font-bold text-gray-900">{winRate}%</div>
         </div>
       </div>
 

@@ -35,14 +35,20 @@ export function GameControls({
           <button
             onClick={onHit}
             disabled={disabled}
-            className="px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white rounded-xl font-bold text-lg shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all transform hover:scale-105 active:scale-95 min-w-[120px]"
+            className="px-8 py-4 bg-white/90 hover:bg-white text-gray-900 rounded-xl font-bold text-lg shadow-lg border-2 border-gray-300 hover:border-celo-yellow disabled:opacity-50 disabled:cursor-not-allowed transition-all transform hover:scale-105 active:scale-95 min-w-[120px]"
+            style={{
+              boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)"
+            }}
           >
             HIT
           </button>
           <button
             onClick={onStand}
             disabled={disabled}
-            className="px-8 py-4 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white rounded-xl font-bold text-lg shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all transform hover:scale-105 active:scale-95 min-w-[120px]"
+            className="px-8 py-4 bg-white/90 hover:bg-white text-gray-900 rounded-xl font-bold text-lg shadow-lg border-2 border-gray-300 hover:border-celo-yellow disabled:opacity-50 disabled:cursor-not-allowed transition-all transform hover:scale-105 active:scale-95 min-w-[120px]"
+            style={{
+              boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)"
+            }}
           >
             STAND
           </button>
@@ -52,7 +58,10 @@ export function GameControls({
       {showNewGameButton && (
         <button
           onClick={onNewGame}
-          className="px-8 py-4 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white rounded-xl font-bold text-lg shadow-lg transition-all transform hover:scale-105 active:scale-95 min-w-[140px]"
+          className="px-8 py-4 bg-gradient-to-r from-celo-yellow to-yellow-400 hover:from-yellow-400 hover:to-yellow-500 text-gray-900 rounded-xl font-bold text-lg shadow-lg transition-all transform hover:scale-105 active:scale-95 min-w-[140px]"
+          style={{
+            boxShadow: "0 0 0 2px #FCFF52, 0 4px 6px -1px rgba(0, 0, 0, 0.1)"
+          }}
         >
           NEW GAME
         </button>
