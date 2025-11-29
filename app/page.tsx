@@ -24,6 +24,7 @@ export default function Home() {
     isPending,
     showDealerCard,
     isConnected,
+    address,
     hit,
     stand,
     newGame,
@@ -33,39 +34,48 @@ export default function Home() {
   } = useBlackjack();
 
   return (
-    <div className="min-h-screen p-4 sm:p-8 bg-gradient-to-br from-gray-100 via-gray-50 to-yellow-50/20">
+    <div className="min-h-screen p-2 sm:p-6 bg-gradient-to-br from-gray-100 via-gray-50 to-yellow-50/20">
       <div className="max-w-4xl mx-auto">
-        {/* Header */}
-        <header className="text-center mb-8">
-          <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-2 drop-shadow-sm">
+        {/* Header - Compact for mobile */}
+        <header className="text-center mb-2 sm:mb-4">
+          <h1 className="text-2xl sm:text-4xl font-bold text-gray-900 drop-shadow-sm">
             🃏 Blackjack on Celo
           </h1>
-          <p className="text-gray-600 text-sm sm:text-base font-medium">
-            Play free or on-chain with Celo blockchain
-          </p>
         </header>
 
-        {/* Mode Toggle */}
-        <div className="flex justify-center mb-6">
-          <ModeToggle mode={mode} onModeChange={switchMode} />
+        {/* Mode Toggle & Wallet Info - Compact row */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-2 mb-2 sm:mb-4">
+          <div className="flex justify-center">
+            <ModeToggle mode={mode} onModeChange={switchMode} />
+          </div>
+
+          {/* Connected Wallet Display (On-Chain Mode) */}
+          {mode === 'onchain' && isConnected && address && (
+            <div className="flex items-center gap-2 bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-lg border border-celo-yellow shadow-sm text-xs">
+              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+              <span className="font-mono text-gray-800 font-medium">
+                {address.slice(0, 6)}...{address.slice(-4)}
+              </span>
+            </div>
+          )}
         </div>
 
         {/* Wallet Connection (On-Chain Mode Only) */}
         {mode === 'onchain' && !isConnected && (
-          <div className="mb-6">
+          <div className="mb-3">
             <WalletConnect />
           </div>
         )}
 
         {/* Game Message */}
         {message && (
-          <div className="mb-4">
+          <div className="mb-2">
             <GameMessage message={message} />
           </div>
         )}
 
-        {/* Main Game Area */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+        {/* Main Game Area - Compact for mobile */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4 mb-3">
           {/* Game Table (spans 2 columns on large screens) */}
           <div className="lg:col-span-2">
             <BlackjackTable
@@ -88,8 +98,8 @@ export default function Home() {
             />
           </div>
 
-          {/* Stats Sidebar */}
-          <div>
+          {/* Stats Sidebar - Hidden on mobile when game is active */}
+          <div className={`${gamePhase === 'playing' ? 'hidden lg:block' : ''}`}>
             <GameStats
               stats={stats}
               mode={mode}
@@ -99,16 +109,16 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Farcaster Share (when game is finished) */}
+        {/* Farcaster Share (when game is finished) - Compact */}
         {gamePhase === 'finished' && outcome && (
-          <div className="mb-6">
+          <div className="mb-3">
             <FarcasterShare result={outcome} stats={stats} />
           </div>
         )}
 
-        {/* Footer */}
-        <footer className="text-center text-gray-600 text-sm mt-12 pb-4">
-          <p>
+        {/* Footer - Smaller on mobile */}
+        <footer className="text-center text-gray-500 text-xs mt-4 sm:mt-8 pb-4">
+          <p className="hidden sm:block">
             Built with ❤️ on{" "}
             <a
               href="https://celo.org"
@@ -118,9 +128,6 @@ export default function Home() {
             >
               Celo
             </a>
-          </p>
-          <p className="mt-1 text-xs text-gray-500">
-            Free Play: Virtual credits | On-Chain: Provably fair on Celo blockchain
           </p>
         </footer>
       </div>

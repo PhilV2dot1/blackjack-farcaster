@@ -18,9 +18,9 @@ export function BlackjackTable({
 }: BlackjackTableProps) {
   return (
     <div
-      className="bg-gradient-to-br from-gray-100 via-gray-50 to-yellow-50/20 rounded-3xl p-8 shadow-2xl relative overflow-hidden"
+      className="bg-gradient-to-br from-gray-100 via-gray-50 to-yellow-50/20 rounded-2xl sm:rounded-3xl p-4 sm:p-8 shadow-2xl relative overflow-hidden min-h-[280px] sm:min-h-[320px]"
       style={{
-        boxShadow: "0 0 0 6px #FCFF52, 0 20px 25px -5px rgba(0, 0, 0, 0.3)"
+        boxShadow: "0 0 0 3px #FCFF52, 0 10px 15px -3px rgba(0, 0, 0, 0.2)"
       }}
     >
       {/* Glassmorphic overlay */}
@@ -35,7 +35,7 @@ export function BlackjackTable({
       {/* Content wrapper */}
       <div className="relative z-10">
       {/* Dealer Section */}
-      <div className="mb-12">
+      <div className="mb-6 sm:mb-10">
         <DealerHand
           cards={dealerCards}
           total={dealerTotal}
@@ -45,11 +45,11 @@ export function BlackjackTable({
 
       {/* Divider */}
       {playerCards.length > 0 && dealerCards.length > 0 && (
-        <div className="border-t-2 border-gray-300/50 my-8" style={{ boxShadow: '0 1px 0 rgba(252, 255, 82, 0.2)' }}></div>
+        <div className="border-t-2 border-gray-300/50 my-4 sm:my-6" style={{ boxShadow: '0 1px 0 rgba(252, 255, 82, 0.2)' }}></div>
       )}
 
       {/* Player Section */}
-      <div className="mt-12">
+      <div className="mt-6 sm:mt-10">
         <PlayerHand
           cards={playerCards}
           total={playerTotal}

@@ -400,6 +400,7 @@ export function useBlackjack() {
     isPending,
     showDealerCard,
     isConnected,
+    address,
     hit,
     stand,
     newGame,
