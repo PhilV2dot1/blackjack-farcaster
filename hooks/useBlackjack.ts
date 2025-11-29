@@ -31,10 +31,11 @@ export function useBlackjack() {
   const [showDealerCard, setShowDealerCard] = useState(false);
 
   // Wagmi hooks
-  const { writeContract, data: hash, isPending, error: writeError } = useWriteContract();
-  const { data: receipt, error: receiptError } = useWaitForTransactionReceipt({
+  const { writeContract, data: hash, isPending, error: writeError, reset: resetWrite } = useWriteContract();
+  const { data: receipt, error: receiptError, isLoading: isConfirming } = useWaitForTransactionReceipt({
     hash,
-    timeout: 60_000, // 60 second timeout
+    timeout: 120_000, // 2 minute timeout for better reliability on Celo
+    confirmations: 1, // Wait for 1 confirmation
   });
   const { switchChain } = useSwitchChain();
 
@@ -97,9 +98,15 @@ export function useBlackjack() {
     if (hash && mode === 'onchain') {
       console.log('✅ Transaction sent:', hash);
       console.log('🔍 View on Celoscan:', `https://celoscan.io/tx/${hash}`);
-      setMessage('⏳ Transaction submitted! Waiting for confirmation...');
+
+      // Show confirming status
+      if (isConfirming) {
+        setMessage('⏳ Confirming on blockchain... (this may take 10-30 seconds)');
+      } else {
+        setMessage('✅ Transaction sent! Waiting for blockchain confirmation...');
+      }
     }
-  }, [hash, mode]);
+  }, [hash, mode, isConfirming]);
 
   // Handle write errors
   useEffect(() => {
@@ -121,12 +128,21 @@ export function useBlackjack() {
 
   // Handle receipt errors (timeout, etc.)
   useEffect(() => {
-    if (receiptError) {
+    if (receiptError && mode === 'onchain') {
       console.error('Receipt error:', receiptError);
-      setMessage('❌ Transaction timeout - Please check your wallet and try again');
+      const errorMsg = receiptError.message || '';
+
+      if (errorMsg.includes('timeout')) {
+        setMessage('⚠️ Transaction taking longer than expected. Check Celoscan for status.');
+      } else {
+        setMessage('❌ Transaction error - Please try again');
+      }
+
       setGamePhase('betting');
+      // Reset write state for clean retry
+      resetWrite?.();
     }
-  }, [receiptError]);
+  }, [receiptError, mode, resetWrite]);
 
   // Parse transaction receipt for instant results (on-chain mode)
   useEffect(() => {
@@ -297,44 +313,57 @@ export function useBlackjack() {
     // Push: no change to credits
   }, [gamePhase, mode, dealerHand, playerHand, playerTotal, calculateHandTotal, updateStatsForOutcome]);
 
-  // Play on-chain with optimistic updates
+  // Play on-chain with improved reliability
   const playOnChain = useCallback(async () => {
     if (!isConnected) {
       setMessage('❌ Please connect your wallet first');
       return;
     }
 
+    if (!address) {
+      setMessage('❌ Wallet address not found');
+      return;
+    }
+
     try {
+      // Reset previous transaction state
+      resetWrite?.();
+
       // Check if we're on the correct chain (Celo)
       if (chain?.id !== celo.id) {
         setMessage('⚡ Switching to Celo...');
         try {
           await switchChain?.({ chainId: celo.id });
-          await new Promise(resolve => setTimeout(resolve, 300));
+          // Give wallet time to switch
+          await new Promise(resolve => setTimeout(resolve, 500));
         } catch (switchError) {
           console.error('Chain switch error:', switchError);
-          setMessage('❌ Please switch to Celo in your wallet');
+          setMessage('❌ Please switch to Celo network in your wallet');
           return;
         }
       }
 
-      // Optimistic update: show immediate feedback
-      setMessage('🎲 Preparing game...');
+      // Show immediate feedback
+      setMessage('🎲 Preparing your game...');
       setGamePhase('playing');
 
+      console.log('📤 Sending playGame transaction...');
+
+      // Send transaction with explicit gas settings for reliability
       writeContract({
         address: CONTRACT_ADDRESS,
         abi: CONTRACT_ABI,
         functionName: 'playGame',
         chainId: celo.id,
+        gas: 500_000n, // Set explicit gas limit
       });
 
     } catch (error) {
-      console.error('Transaction error:', error);
-      setMessage('❌ Transaction failed');
+      console.error('❌ Transaction error:', error);
+      setMessage('❌ Transaction failed - Please try again');
       setGamePhase('betting');
     }
-  }, [isConnected, chain, switchChain, writeContract]);
+  }, [isConnected, address, chain, switchChain, writeContract, resetWrite]);
 
   // New game
   const newGame = useCallback(() => {
