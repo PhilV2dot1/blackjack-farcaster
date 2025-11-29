@@ -31,8 +31,11 @@ export function useBlackjack() {
   const [showDealerCard, setShowDealerCard] = useState(false);
 
   // Wagmi hooks
-  const { writeContract, data: hash, isPending } = useWriteContract();
-  const { data: receipt } = useWaitForTransactionReceipt({ hash });
+  const { writeContract, data: hash, isPending, error: writeError } = useWriteContract();
+  const { data: receipt, error: receiptError } = useWaitForTransactionReceipt({
+    hash,
+    timeout: 60_000, // 60 second timeout
+  });
   const { switchChain } = useSwitchChain();
 
   const { data: onchainStats, refetch: refetchStats } = useReadContract({
@@ -89,6 +92,41 @@ export function useBlackjack() {
     });
   }, []);
 
+  // Log transaction hash for debugging
+  useEffect(() => {
+    if (hash) {
+      console.log('Transaction sent:', hash);
+      console.log('View on Celoscan:', `https://celoscan.io/tx/${hash}`);
+    }
+  }, [hash]);
+
+  // Handle write errors
+  useEffect(() => {
+    if (writeError) {
+      console.error('Write contract error:', writeError);
+      const errorMessage = writeError.message || 'Transaction failed';
+
+      if (errorMessage.includes('User rejected') || errorMessage.includes('User denied')) {
+        setMessage('❌ Transaction rejected by user');
+      } else if (errorMessage.includes('insufficient funds')) {
+        setMessage('❌ Insufficient funds for gas');
+      } else {
+        setMessage('❌ Transaction failed: ' + errorMessage.substring(0, 50));
+      }
+
+      setGamePhase('betting');
+    }
+  }, [writeError]);
+
+  // Handle receipt errors (timeout, etc.)
+  useEffect(() => {
+    if (receiptError) {
+      console.error('Receipt error:', receiptError);
+      setMessage('❌ Transaction timeout - Please check your wallet and try again');
+      setGamePhase('betting');
+    }
+  }, [receiptError]);
+
   // Parse transaction receipt for instant results (on-chain mode)
   useEffect(() => {
     if (receipt && mode === 'onchain' && address) {
@@ -114,15 +152,20 @@ export function useBlackjack() {
         setShowDealerCard(true);
 
         const messages = {
-          win: 'You WIN!',
+          win: '✅ You WIN!',
           lose: 'Dealer wins',
           push: "It's a PUSH",
-          blackjack: 'BLACKJACK!'
+          blackjack: '🎉 BLACKJACK!'
         };
         setMessage(messages[outcome as Outcome]);
 
         updateStatsForOutcome(outcome as Outcome);
         setTimeout(() => refetchStats(), 2000);
+      } else {
+        // No game event found in receipt
+        console.warn('No GamePlayed event found in receipt');
+        setMessage('⚠️ Transaction successful but no game data received');
+        setGamePhase('betting');
       }
     }
   }, [receipt, address, mode, updateStatsForOutcome, refetchStats]);
