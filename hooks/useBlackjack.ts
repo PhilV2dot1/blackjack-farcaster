@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useCallback, useEffect } from "react";
-import { useAccount, useReadContract, useWriteContract, useWaitForTransactionReceipt } from "wagmi";
+import { useAccount, useReadContract, useWriteContract, useWaitForTransactionReceipt, useSwitchChain } from "wagmi";
 import { parseEventLogs } from "viem";
+import { celo } from "wagmi/chains";
 import { Card, createShuffledDeck, convertToCard, determineWinner, Outcome } from "@/lib/cards";
 import { CONTRACT_ADDRESS, CONTRACT_ABI } from "@/lib/contract-abi";
 import type { GameStats } from "@/lib/farcaster";
@@ -10,7 +11,7 @@ import type { GameStats } from "@/lib/farcaster";
 export type GamePhase = 'betting' | 'playing' | 'dealer' | 'finished';
 
 export function useBlackjack() {
-  const { address, isConnected } = useAccount();
+  const { address, isConnected, chain } = useAccount();
   const [mode, setMode] = useState<'free' | 'onchain'>('free');
   const [gamePhase, setGamePhase] = useState<GamePhase>('betting');
 
@@ -32,6 +33,7 @@ export function useBlackjack() {
   // Wagmi hooks
   const { writeContract, data: hash, isPending } = useWriteContract();
   const { data: receipt } = useWaitForTransactionReceipt({ hash });
+  const { switchChain } = useSwitchChain();
 
   const { data: onchainStats, refetch: refetchStats } = useReadContract({
     address: CONTRACT_ADDRESS,
@@ -259,6 +261,20 @@ export function useBlackjack() {
     }
 
     try {
+      // Check if we're on the correct chain (Celo)
+      if (chain?.id !== celo.id) {
+        setMessage('⏳ Switching to Celo network...');
+        try {
+          await switchChain?.({ chainId: celo.id });
+          // Wait a bit for the chain to switch
+          await new Promise(resolve => setTimeout(resolve, 1000));
+        } catch (switchError) {
+          console.error('Chain switch error:', switchError);
+          setMessage('❌ Please switch to Celo network in your wallet');
+          return;
+        }
+      }
+
       setGamePhase('playing');
       setMessage('⏳ Sending transaction...');
       setPlayerHand([]);
@@ -268,6 +284,7 @@ export function useBlackjack() {
         address: CONTRACT_ADDRESS,
         abi: CONTRACT_ABI,
         functionName: 'playGame',
+        chainId: celo.id,
       });
 
       setMessage('⏳ Waiting for confirmation...');
@@ -276,7 +293,7 @@ export function useBlackjack() {
       setMessage('❌ Transaction failed');
       setGamePhase('betting');
     }
-  }, [isConnected, writeContract]);
+  }, [isConnected, chain, switchChain, writeContract]);
 
   // New game
   const newGame = useCallback(() => {
