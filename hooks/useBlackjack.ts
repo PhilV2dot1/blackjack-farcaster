@@ -92,13 +92,14 @@ export function useBlackjack() {
     });
   }, []);
 
-  // Log transaction hash for debugging
+  // Log transaction hash and update message
   useEffect(() => {
-    if (hash) {
-      console.log('Transaction sent:', hash);
-      console.log('View on Celoscan:', `https://celoscan.io/tx/${hash}`);
+    if (hash && mode === 'onchain') {
+      console.log('✅ Transaction sent:', hash);
+      console.log('🔍 View on Celoscan:', `https://celoscan.io/tx/${hash}`);
+      setMessage('⏳ Transaction submitted! Waiting for confirmation...');
     }
-  }, [hash]);
+  }, [hash, mode]);
 
   // Handle write errors
   useEffect(() => {
@@ -296,7 +297,7 @@ export function useBlackjack() {
     // Push: no change to credits
   }, [gamePhase, mode, dealerHand, playerHand, playerTotal, calculateHandTotal, updateStatsForOutcome]);
 
-  // Play on-chain
+  // Play on-chain with optimistic updates
   const playOnChain = useCallback(async () => {
     if (!isConnected) {
       setMessage('❌ Please connect your wallet first');
@@ -306,22 +307,20 @@ export function useBlackjack() {
     try {
       // Check if we're on the correct chain (Celo)
       if (chain?.id !== celo.id) {
-        setMessage('⏳ Switching to Celo network...');
+        setMessage('⚡ Switching to Celo...');
         try {
           await switchChain?.({ chainId: celo.id });
-          // Wait a bit for the chain to switch
-          await new Promise(resolve => setTimeout(resolve, 1000));
+          await new Promise(resolve => setTimeout(resolve, 300));
         } catch (switchError) {
           console.error('Chain switch error:', switchError);
-          setMessage('❌ Please switch to Celo network in your wallet');
+          setMessage('❌ Please switch to Celo in your wallet');
           return;
         }
       }
 
+      // Optimistic update: show immediate feedback
+      setMessage('🎲 Preparing game...');
       setGamePhase('playing');
-      setMessage('⏳ Sending transaction...');
-      setPlayerHand([]);
-      setDealerHand([]);
 
       writeContract({
         address: CONTRACT_ADDRESS,
@@ -330,7 +329,6 @@ export function useBlackjack() {
         chainId: celo.id,
       });
 
-      setMessage('⏳ Waiting for confirmation...');
     } catch (error) {
       console.error('Transaction error:', error);
       setMessage('❌ Transaction failed');
