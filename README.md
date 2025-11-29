@@ -2,6 +2,9 @@
 
 A full-featured Blackjack game built as a Farcaster mini-app with Celo blockchain integration. Play in Free Mode with virtual credits or On-Chain Mode where games are recorded on Celo Mainnet.
 
+🎮 **Live Demo**: [blackjack-farcaster.vercel.app](https://blackjack-farcaster.vercel.app)
+⛓️ **Contract**: [0x6cb9971850767026feBCb4801c0b8a946F28C9Ec](https://celoscan.io/address/0x6cb9971850767026feBCb4801c0b8a946F28C9Ec) (Celo Mainnet)
+
 ## ✨ Features
 
 ### Free Play Mode
@@ -16,14 +19,20 @@ A full-featured Blackjack game built as a Farcaster mini-app with Celo blockchai
 - 🎯 Win/loss streaks
 - 🔐 Provably fair randomness (block.prevrandao)
 - 💸 No real money - just for fun!
+- 🔄 Auto-switching to Celo network
+- ⚡ Optimistic UI updates for fast gameplay
+- 💪 Reliable transactions (120s timeout, explicit gas limits)
 
 ### Game Features
 - ♠️ Standard Blackjack rules
 - 🃏 Dealer hits on 16, stands on 17+
 - 🎴 Ace counts as 1 or 11 (smart calculation)
-- 🎨 Beautiful mobile-first UI
-- 🌈 Glassmorphism design with Celo yellow branding
-- 📱 Optimized for Farcaster mobile experience
+- 🎨 Beautiful mobile-first UI with Solo-Jackpot visual signature
+- 🌈 Glassmorphism design with gray gradients and yellow accents
+- 📱 Optimized for Farcaster mobile experience (compact layout, no scrolling)
+- 👛 Connected wallet display with address
+- 🔁 One-click "PLAY AGAIN" button for on-chain games
+- 🎯 Realistic card symbols (♠️♥️♦️♣️) with PNG assets
 
 ## 🏗️ Tech Stack
 
@@ -57,8 +66,16 @@ A full-featured Blackjack game built as a Farcaster mini-app with Celo blockchai
 
 3. Set up environment variables:
    ```bash
-   cp .env.example .env
+   cp .env.example .env.local
    ```
+
+   Add the following to `.env.local`:
+   ```env
+   NEXT_PUBLIC_URL=http://localhost:3000
+   NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=your_project_id_here
+   ```
+
+   Get your WalletConnect Project ID from [WalletConnect Cloud](https://cloud.walletconnect.com)
 
 4. Run the development server:
    ```bash
@@ -67,34 +84,35 @@ A full-featured Blackjack game built as a Farcaster mini-app with Celo blockchai
 
 5. Open [http://localhost:3000](http://localhost:3000)
 
-## 📝 Smart Contract Deployment
+## 📝 Smart Contract
 
-### Deploy to Celo Alfajores (Testnet)
+### Current Deployment
 
-1. Get testnet CELO from [Celo Faucet](https://faucet.celo.org/alfajores)
+The contract is already deployed on **Celo Mainnet**:
+- **Address**: `0x6cb9971850767026feBCb4801c0b8a946F28C9Ec`
+- **Explorer**: [View on CeloScan](https://celoscan.io/address/0x6cb9971850767026feBCb4801c0b8a946F28C9Ec)
+- **Network**: Celo (Chain ID: 42220)
 
-2. Add your private key to `.env`:
-   ```
-   PRIVATE_KEY=your_private_key_here
-   ```
+### Deploy Your Own Contract
 
-3. Deploy:
+If you want to deploy your own version:
+
+1. **For Testnet (Alfajores)**:
    ```bash
+   # Get testnet CELO from https://faucet.celo.org/alfajores
    npx hardhat run scripts/deploy.ts --network alfajores
    ```
 
-### Deploy to Celo Mainnet
+2. **For Mainnet**:
+   ```bash
+   npx hardhat run scripts/deploy.ts --network celo
+   ```
 
-```bash
-npx hardhat run scripts/deploy.ts --network celo
-```
-
-### Update Contract Address
-
-After deployment, update `lib/contract-abi.ts`:
-```typescript
-export const CONTRACT_ADDRESS = "0xYourDeployedAddress" as `0x${string}`;
-```
+3. **Update Contract Address**:
+   After deployment, update `lib/contract-abi.ts`:
+   ```typescript
+   export const CONTRACT_ADDRESS = "0xYourDeployedAddress" as `0x${string}`;
+   ```
 
 ## 🎮 How to Play
 
@@ -187,25 +205,62 @@ npx hardhat compile
 
 ### Deploy to Vercel
 
-1. Push code to GitHub
-2. Import project in [Vercel](https://vercel.com)
-3. Configure environment variables (if any)
-4. Deploy!
+1. **Push to GitHub**:
+   ```bash
+   git add .
+   git commit -m "Initial commit"
+   git push origin master
+   ```
+
+2. **Configure Vercel**:
+   - Import project in [Vercel](https://vercel.com)
+   - Add environment variables:
+     - `NEXT_PUBLIC_URL`: Your deployed URL (e.g., `https://your-app.vercel.app`)
+     - `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID`: Your WalletConnect Project ID
+   - Deploy!
+
+3. **Update After First Deploy**:
+   After getting your Vercel URL, update `NEXT_PUBLIC_URL` in Vercel settings and redeploy.
 
 ### Farcaster Mini App Integration
 
-The app includes Farcaster metadata in `app/layout.tsx`. After deployment:
+The app is fully configured for Farcaster mini-apps:
 
-1. Create an OG image at `/public/og-image.png` (1200x630px)
-2. Update `NEXT_PUBLIC_APP_URL` in your deployment settings
-3. Share your app URL in Farcaster!
+#### Required Assets
+All PNG assets are included in `/public/`:
+- `icon.png` - App icon (512x512px)
+- `og-image.png` - OpenGraph image for sharing (1200x630px)
+- `splash.png` - Splash screen image
 
-## 🎨 Design
+#### Manifest Configuration
+The `public/manifest.json` defines the mini-app metadata with Solo-Jackpot branding.
 
-- **Color Scheme**: Celo Yellow (#FCFF52) + Dark theme
-- **Layout**: Mobile-first responsive design
-- **Effects**: Glassmorphism, smooth animations
-- **Accessibility**: Reduced motion support, touch-friendly targets
+#### Farcaster Redirect
+The app includes a redirect configuration in `next.config.mjs` that points to the Farcaster hosted manifest. This is required for mini-app verification.
+
+#### Metadata Setup
+Farcaster metadata is configured in `app/layout.tsx` with:
+- OpenGraph tags for rich previews
+- `fc:miniapp` metadata for Farcaster integration
+- Launch button configuration
+
+#### Deploy to Farcaster
+
+1. Ensure your app is deployed and accessible via HTTPS
+2. The manifest redirect is automatically configured
+3. Test your mini-app in Farcaster mobile
+4. Share your app URL in Farcaster frames!
+
+## 🎨 Design - Solo-Jackpot Visual Signature
+
+- **Color Scheme**: Gray gradients with yellow accents (#FCFF52)
+- **Visual Style**: Glassmorphism with backdrop blur effects
+- **Layout**: Mobile-first responsive design optimized for Farcaster
+- **Effects**: Smooth animations, realistic card symbols
+- **Typography**: Clean, modern font with proper hierarchy
+- **Accessibility**: Reduced motion support, touch-friendly targets (44px minimum)
+- **Cards**: PNG assets with realistic ♠️♥️♦️♣️ symbols
+- **Compact Mode**: Optimized layout for mobile viewports with minimal scrolling
 
 ## 📊 Smart Contract Details
 
@@ -236,11 +291,99 @@ Provides sufficient randomness for entertainment while being gas-efficient.
 - Randomness is suitable for games but not cryptographic security
 - Always verify contract address before interacting
 
-## 🐛 Known Issues
+## ✅ Recent Improvements
 
-- Contract deployment requires updating CONTRACT_ADDRESS manually
-- On-chain mode requires CELO tokens for gas
-- Stats don't sync between Free and On-Chain modes
+- ✅ **Transaction Reliability**: 120-second timeout with explicit gas limits (500,000)
+- ✅ **Network Auto-Switching**: Automatically switches to Celo when user is on Ethereum
+- ✅ **Optimistic Updates**: Fast UI feedback with 300ms delays between actions
+- ✅ **Mobile Optimization**: Compact layout removes scrolling in Farcaster mobile
+- ✅ **Connected Wallet Display**: Shows connected address with green indicator
+- ✅ **Play Again Button**: One-click replay for on-chain games
+- ✅ **PNG Image Migration**: All assets migrated from SVG to PNG for better compatibility
+- ✅ **Error Handling**: Improved error messages and recovery options
+
+## 🐛 Known Issues & Considerations
+
+- Contract deployment requires updating `CONTRACT_ADDRESS` in `lib/contract-abi.ts`
+- On-chain mode requires CELO tokens for gas (~$0.01 per game)
+- Stats don't sync between Free and On-Chain modes (by design)
+- First wallet connection may take longer on mobile
+
+## 🚀 Creating a New Mini-App Based on This Project
+
+This project serves as a great template for building Farcaster mini-apps with blockchain integration. Here's how to create your own:
+
+### 1. Clone and Rename
+
+```bash
+git clone https://github.com/PhilV2dot1/blackjack-farcaster.git my-new-miniapp
+cd my-new-miniapp
+rm -rf .git
+git init
+```
+
+### 2. Update Package.json
+
+Change the `name`, `description`, and other metadata in `package.json`.
+
+### 3. Modify Smart Contract
+
+1. Edit `contracts/YourContract.sol` with your game logic
+2. Update contract ABI and address in `lib/contract-abi.ts`
+3. Deploy to Celo:
+   ```bash
+   npx hardhat run scripts/deploy.ts --network celo
+   ```
+
+### 4. Update UI Components
+
+- Replace game logic in `hooks/useBlackjack.ts` (or create your own hook)
+- Modify components in `components/` folder
+- Update styles to match your theme (keep Solo-Jackpot signature or create your own)
+
+### 5. Update Assets
+
+Generate new PNG images (512x512, 1200x630):
+- `public/icon.png` - Your app icon
+- `public/og-image.png` - Social sharing image
+- `public/splash.png` - Splash screen
+
+### 6. Configure Farcaster
+
+1. Update metadata in `app/layout.tsx`:
+   - Title, description
+   - Button text and action
+2. Update `public/manifest.json` with your app details
+3. Get a new Farcaster manifest URL and update redirect in `next.config.mjs`
+
+### 7. Environment Setup
+
+Create `.env.local`:
+```env
+NEXT_PUBLIC_URL=your-vercel-url
+NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=your-project-id
+```
+
+### 8. Deploy
+
+```bash
+git add .
+git commit -m "Initial commit for my new mini-app"
+git remote add origin your-github-repo
+git push -u origin master
+```
+
+Then deploy to Vercel and configure environment variables.
+
+### Key Files to Modify
+
+- `contracts/` - Your smart contract logic
+- `hooks/` - Game/app logic
+- `components/` - UI components
+- `app/layout.tsx` - Metadata and SEO
+- `public/manifest.json` - Farcaster manifest
+- `lib/contract-abi.ts` - Contract interface
+- `next.config.mjs` - Farcaster redirect
 
 ## 🤝 Contributing
 
