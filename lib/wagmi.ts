@@ -1,7 +1,7 @@
 import { createConfig, http, cookieStorage, createStorage } from "wagmi";
 import { celo } from "wagmi/chains";
 import { farcasterMiniApp } from "@farcaster/miniapp-wagmi-connector";
-import { injected, metaMask } from "wagmi/connectors";
+import { injected, metaMask, walletConnect } from "wagmi/connectors";
 
 const celoRpcUrl = "https://forno.celo.org";
 
@@ -12,10 +12,23 @@ function getAppUrl() {
   return process.env.NEXT_PUBLIC_URL || 'http://localhost:3000';
 }
 
+// WalletConnect project ID (you can get one from https://cloud.walletconnect.com)
+const walletConnectProjectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || 'a01e2f3b4c5d6e7f8a9b0c1d2e3f4a5b';
+
 export const config = createConfig({
   chains: [celo],
   connectors: [
     farcasterMiniApp(),
+    walletConnect({
+      projectId: walletConnectProjectId,
+      metadata: {
+        name: "Blackjack on Celo",
+        description: "Play Blackjack on-chain! Free mode or compete on Celo blockchain.",
+        url: getAppUrl(),
+        icons: [`${getAppUrl()}/icon.svg`],
+      },
+      showQrModal: true,
+    }),
     metaMask({
       dappMetadata: {
         name: "Blackjack on Celo",

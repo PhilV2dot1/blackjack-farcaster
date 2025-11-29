@@ -40,3 +40,4 @@ next-env.d.ts
 artifacts/
 cache/
 typechain-types/
+.env.local

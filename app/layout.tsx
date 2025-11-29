@@ -42,7 +42,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="antialiased bg-gradient-to-br from-gray-900 via-gray-800 to-green-900 min-h-screen">
+      <body className="antialiased bg-gradient-to-br from-gray-100 via-gray-50 to-yellow-50/20 min-h-screen">
         <Providers>{children}</Providers>
       </body>
     </html>

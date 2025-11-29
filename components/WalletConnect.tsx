@@ -6,12 +6,14 @@ import { useFarcaster } from "./providers";
 
 const CONNECTOR_ICONS: Record<string, string> = {
   "Farcaster Wallet": "🔵",
+  "WalletConnect": "🔗",
   "MetaMask": "🦊",
-  "Browser Wallet": "🔗",
+  "Browser Wallet": "💼",
 };
 
 const CONNECTOR_DESCRIPTIONS: Record<string, string> = {
   "Farcaster Wallet": "Connect with your Farcaster wallet",
+  "WalletConnect": "Connect with any mobile wallet",
   "MetaMask": "Connect with MetaMask",
   "Browser Wallet": "Connect with your browser wallet",
 };
